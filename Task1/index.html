@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz System</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts - Space Grotesk for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --bg: #f8fafc;          /* Light background color */
+            --text: #1e293b;         /* Dark text color */
+            --accent: #ff6b6b;        /* Primary accent color (coral) */
+            --secondary: #4ecdc4;     /* Secondary accent color (teal) */
+            --border: #e2e8f0;        /* Border color */
+            --card-bg: #ffffff;       /* Card background color */
+        }
+
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Base body styles */
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;        /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;  /* Center content vertically */
+            padding: 2rem;
+        }
+
+        /* Main container for content */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Logo section styling */
+        .logo {
+            margin-bottom: 2rem;
+        }
+
+        /* Logo icon styling */
+        .logo i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* Logo heading styling */
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Logo description text */
+        .logo p {
+            font-size: 1.1rem;
+            color: #64748b;           /* Muted text color */
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Login options container */
+        .login-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;                /* Space between login cards */
+            margin-top: 3rem;
+        }
+
+        /* Individual login card styling */
+        .login-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 250px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+            transition: transform 0.2s, box-shadow 0.2s;      /* Smooth hover effect */
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        /* Hover effect for login cards */
+        .login-card:hover {
+            transform: translateY(-5px);                      /* Slight lift effect */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+        }
+
+        /* Icon styling within login cards */
+        .login-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Admin card icon color */
+        .login-card.admin i {
+            color: var(--accent);
+        }
+
+        /* Student card icon color */
+        .login-card.student i {
+            color: var(--secondary);
+        }
+
+        /* Card heading styling */
+        .login-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Card description text */
+        .login-card p {
+            font-size: 0.9rem;
+            color: #64748b;           /* Muted text color */
+        }
+
+        /* Responsive design for mobile devices */
+        @media (max-width: 600px) {
+            /* Stack login cards vertically on small screens */
+            .login-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            /* Adjust card width for mobile */
+            .login-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Logo and title section -->
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>  <!-- Graduation cap icon -->
+            <h1>Quiz System</h1>
+            <p>A simple and efficient platform for managing and taking online quizzes</p>
+        </div>
+        
+        <!-- Login options section with two cards -->
+        <div class="login-options">
+            <!-- Admin login card -->
+            <a href="admin/login.html" class="login-card admin">
+                <i class="fas fa-user-shield"></i>  <!-- Shield icon for admin -->
+                <h2>Admin Login</h2>
+                <p>Manage quizzes, students, and view results</p>
+            </a>
+            
+            <!-- Student login card -->
+            <a href="student/login.html" class="login-card student">
+                <i class="fas fa-user-graduate"></i>  <!-- Graduate icon for student -->
+                <h2>Student Login</h2>
+                <p>Take quizzes and view your results</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

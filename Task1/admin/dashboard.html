@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Exam Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --accent: #ff6b6b;
+            --secondary: #4ecdc4;
+            --border: #e2e8f0;
+            --error: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --card-bg: #ffffff;
+            --sidebar-width: 250px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header i {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-menu button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-menu button:hover {
+            background: #ff5252;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-1px);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 600;
+            background: var(--bg);
+        }
+
+        tr:hover {
+            background: var(--bg);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Question Form Styles */
+        .option-input {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        .option-input input[type="text"] {
+            flex: 1;
+        }
+
+        .option-input input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+        .add-option-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-option-btn:hover {
+            background: #16a34a;
+        }
+
+        .remove-option-btn {
+            background: var(--error);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .remove-option-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Credentials Display */
+        .credentials-display {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-family: monospace;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+                margin-right: 0.5rem;
+            }
+
+            .nav-link {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h2>ExamPro</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" onclick="showTab('students')">
+                    <i class="fas fa-user-graduate"></i>
+                    Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showTab('exams')">
+                    <i class="fas fa-file-alt"></i>
+                    Exams
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showTab('questions')">
+                    <i class="fas fa-question-circle"></i>
+                    Questions
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showTab('results')">
+                    <i class="fas fa-chart-bar"></i>
+                    Results
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Admin Dashboard</h1>
+            <div class="user-menu">
+                <button onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <div id="students" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Add New Student</h3>
+                </div>
+                <form id="addStudentForm" onsubmit="return handleAddStudent(event)">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="studentName" placeholder="Student Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="studentId" placeholder="Student ID" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="studentPassword" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </form>
+                <div id="studentCredentials" class="credentials-display" style="display: none;">
+                    <h4>Student Credentials:</h4>
+                    <p>ID: <span id="newStudentId"></span></p>
+                    <p>Password: <span id="newStudentPassword"></span></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Student List</h3>
+                </div>
+                <div class="table-container">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="exams" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Create New Exam</h3>
+                </div>
+                <form id="createExamForm" onsubmit="return handleCreateExam(event)">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="examTitle" placeholder="Exam Title" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="examDescription" placeholder="Exam Description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" id="examDuration" placeholder="Duration (minutes)" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Exam</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Exam List</h3>
+                </div>
+                <div class="table-container">
+                    <table id="examTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Duration</th>
+                                <th>Questions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="examList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="questions" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Add Questions to Exam</h3>
+                </div>
+                <form id="addQuestionForm" onsubmit="return handleAddQuestion(event)">
+                    <div class="form-group">
+                        <select class="form-control" id="examSelect" required>
+                            <option value="">Select Exam</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="questionText" placeholder="Question Text" required></textarea>
+                    </div>
+                    <div id="optionsContainer">
+                        <div class="option-input">
+                            <input type="text" class="form-control" placeholder="Option 1" required>
+                            <input type="radio" name="correctAnswer" value="0" required> Correct
+                        </div>
+                        <div class="option-input">
+                            <input type="text" class="form-control" placeholder="Option 2" required>
+                            <input type="radio" name="correctAnswer" value="1" required> Correct
+                        </div>
+                    </div>
+                    <button type="button" class="add-option-btn" onclick="addOption()">Add Option</button>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Add Question</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Questions List</h3>
+                </div>
+                <div id="questionsList"></div>
+            </div>
+        </div>
+
+        <div id="results" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Exam Results</h3>
+                </div>
+                <div class="table-container">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Exam</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // AUTHENTICATION AND INITIALIZATION
+        // =============================================
+        // Check if admin is logged in
+        window.onload = function() {
+            const admin = JSON.parse(localStorage.getItem('currentAdmin'));
+            if (!admin) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Initialize dashboard based on current page
+            const currentPage = window.location.hash.slice(1) || 'students';
+            showTab(currentPage);
+            loadData(currentPage);
+        };
+
+        // =============================================
+        // Tab Navigation System
+        // =============================================
+        function showTab(tabName) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).style.display = 'block';
+
+            // Update active state in navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${tabName}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // =============================================
+        // Student Management
+        // =============================================
+        function loadStudents() {
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            const tbody = document.querySelector('#studentTable tbody');
+            tbody.innerHTML = '';
+
+            students.forEach(student => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>
+                        <button onclick="deleteStudent('${student.id}')" class="btn-delete">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addStudent(event) {
+            event.preventDefault();
+            const form = event.target;
+            const student = {
+                id: form.studentId.value,
+                name: form.studentName.value,
+                password: form.studentPassword.value
+            };
+
+            // Save to localStorage
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            students.push(student);
+            localStorage.setItem('students', JSON.stringify(students));
+
+            // Reset form and reload students
+            form.reset();
+            loadStudents();
+        }
+
+        function deleteStudent(studentId) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                let students = JSON.parse(localStorage.getItem('students') || '[]');
+                students = students.filter(s => s.id !== studentId);
+                localStorage.setItem('students', JSON.stringify(students));
+                loadStudents();
+            }
+        }
+
+        // =============================================
+        // Exam Management
+        // =============================================
+        function loadExams() {
+            const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+            const tbody = document.querySelector('#examTable tbody');
+            tbody.innerHTML = '';
+
+            exams.forEach(exam => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${exam.id}</td>
+                    <td>${exam.title}</td>
+                    <td>${exam.duration} minutes</td>
+                    <td>
+                        <button onclick="deleteExam('${exam.id}')" class="btn-delete">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addExam(event) {
+            event.preventDefault();
+            const form = event.target;
+            const exam = {
+                id: form.examId.value,
+                title: form.examTitle.value,
+                duration: parseInt(form.examDuration.value),
+                questions: []
+            };
+
+            // Save to localStorage
+            const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+            exams.push(exam);
+            localStorage.setItem('exams', JSON.stringify(exams));
+
+            // Reset form and reload exams
+            form.reset();
+            loadExams();
+            loadExamSelect();
+        }
+
+        function deleteExam(examId) {
+            if (confirm('Are you sure you want to delete this exam?')) {
+                let exams = JSON.parse(localStorage.getItem('exams') || '[]');
+                exams = exams.filter(e => e.id !== examId);
+                localStorage.setItem('exams', JSON.stringify(exams));
+                loadExams();
+                loadExamSelect();
+            }
+        }
+
+        // =============================================
+        // Question Management
+        // =============================================
+        function loadExamSelect() {
+            const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+            const select = document.getElementById('examSelect');
+            select.innerHTML = '<option value="">Select Exam</option>';
+            
+            exams.forEach(exam => {
+                const option = document.createElement('option');
+                option.value = exam.id;
+                option.textContent = exam.title;
+                select.appendChild(option);
+            });
+        }
+
+        function addOption() {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const optionCount = optionsContainer.children.length;
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-input';
+            optionDiv.innerHTML = `
+                <input type="text" placeholder="Option ${optionCount + 1}" required>
+                <input type="radio" name="correctAnswer" value="${optionCount}" required>
+                <label>Correct Answer</label>
+                <button type="button" onclick="this.parentElement.remove()" class="btn-delete">Remove</button>
+            `;
+            
+            optionsContainer.appendChild(optionDiv);
+        }
+
+        function handleAddQuestion(event) {
+            event.preventDefault();
+            const form = event.target;
+            const examId = form.examSelect.value;
+            
+            if (!examId) {
+                alert('Please select an exam');
+                return;
+            }
+
+            // Gather question data
+            const question = {
+                text: form.questionText.value,
+                options: [],
+                correctAnswer: parseInt(form.querySelector('input[name="correctAnswer"]:checked').value)
+            };
+
+            // Get options
+            form.querySelectorAll('.option-input input[type="text"]').forEach(input => {
+                question.options.push(input.value);
+            });
+
+            // Save question to exam
+            const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+            const examIndex = exams.findIndex(e => e.id === examId);
+            
+            if (examIndex !== -1) {
+                if (!exams[examIndex].questions) {
+                    exams[examIndex].questions = [];
+                }
+                exams[examIndex].questions.push(question);
+                localStorage.setItem('exams', JSON.stringify(exams));
+                
+                // Reset form and reload questions
+                form.reset();
+                loadQuestions(examId);
+            }
+        }
+
+        function loadQuestions(examId) {
+            const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+            const exam = exams.find(e => e.id === examId);
+            const tbody = document.querySelector('#questionsList tbody');
+            tbody.innerHTML = '';
+
+            if (exam && exam.questions) {
+                exam.questions.forEach((question, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${question.text}</td>
+                        <td>${question.options.join(', ')}</td>
+                        <td>${question.options[question.correctAnswer]}</td>
+                        <td>
+                            <button onclick="deleteQuestion('${examId}', ${index})" class="btn-delete">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function deleteQuestion(examId, questionIndex) {
+            if (confirm('Are you sure you want to delete this question?')) {
+                const exams = JSON.parse(localStorage.getItem('exams') || '[]');
+                const examIndex = exams.findIndex(e => e.id === examId);
+                
+                if (examIndex !== -1 && exams[examIndex].questions) {
+                    exams[examIndex].questions.splice(questionIndex, 1);
+                    localStorage.setItem('exams', JSON.stringify(exams));
+                    loadQuestions(examId);
+                }
+            }
+        }
+
+        // =============================================
+        // Results Management
+        // =============================================
+        function loadResults() {
+            const results = JSON.parse(localStorage.getItem('results') || '[]');
+            const tbody = document.querySelector('#resultsTable tbody');
+            tbody.innerHTML = '';
+
+            results.forEach(result => {
+                const tr = document.createElement('tr');
+                const scorePercentage = Math.round((result.score / result.totalQuestions) * 100);
+                tr.innerHTML = `
+                    <td>${result.studentName}</td>
+                    <td>${result.examTitle}</td>
+                    <td>${result.score}/${result.totalQuestions}</td>
+                    <td>${scorePercentage}%</td>
+                    <td>${new Date(result.date).toLocaleString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // =============================================
+        // Data Loading and Tab Management
+        // =============================================
+        function loadData(tabName) {
+            switch(tabName) {
+                case 'students':
+                    loadStudents();
+                    break;
+                case 'exams':
+                    loadExams();
+                    loadExamSelect();
+                    break;
+                case 'questions':
+                    loadExamSelect();
+                    break;
+                case 'results':
+                    loadResults();
+                    break;
+            }
+        }
+
+        // =============================================
+        // Authentication
+        // =============================================
+        function logout() {
+            localStorage.removeItem('currentAdmin');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html> 

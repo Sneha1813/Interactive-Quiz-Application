@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .score-high {
+            color: var(--success-color);
+        }
+
+        .score-medium {
+            color: var(--warning-color);
+        }
+
+        .score-low {
+            color: var(--danger-color);
+        }
+
+        .result-details {
+            margin-top: 2rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--text-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-card">
+            <div class="result-header">
+                <h1 class="result-title" id="examTitle">Exam Result</h1>
+                <div class="score-display" id="scoreDisplay">0%</div>
+                <div id="resultStatus">Status</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <span class="detail-label">Total Questions</span>
+                    <span class="detail-value" id="totalQuestions">0</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Correct Answers</span>
+                    <span class="detail-value" id="correctAnswers">0</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date Taken</span>
+                    <span class="detail-value" id="dateTaken">-</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the current result from localStorage
+        const currentResult = JSON.parse(localStorage.getItem('currentResult'));
+        if (!currentResult) {
+            window.location.href = 'dashboard.html';
+        }
+
+        // Calculate percentage score
+        const scorePercentage = Math.round((currentResult.score / currentResult.totalQuestions) * 100);
+
+        // Update the UI with result details
+        document.getElementById('examTitle').textContent = currentResult.examTitle;
+        document.getElementById('scoreDisplay').textContent = `${scorePercentage}%`;
+        document.getElementById('totalQuestions').textContent = currentResult.totalQuestions;
+        document.getElementById('correctAnswers').textContent = currentResult.score;
+        document.getElementById('dateTaken').textContent = new Date(currentResult.date).toLocaleDateString();
+
+        // Set score color based on percentage
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const resultStatus = document.getElementById('resultStatus');
+        
+        if (scorePercentage >= 70) {
+            scoreDisplay.classList.add('score-high');
+            resultStatus.textContent = 'Excellent!';
+        } else if (scorePercentage >= 50) {
+            scoreDisplay.classList.add('score-medium');
+            resultStatus.textContent = 'Good job!';
+        } else {
+            scoreDisplay.classList.add('score-low');
+            resultStatus.textContent = 'Keep practicing!';
+        }
+
+        // Clear the current result from localStorage after displaying
+        localStorage.removeItem('currentResult');
+    </script>
+</body>
+</html> 

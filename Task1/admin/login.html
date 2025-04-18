@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Exam Management System</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts - Space Grotesk for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --bg: #f8fafc;          /* Light background color */
+            --text: #1e293b;         /* Dark text color */
+            --accent: #ff6b6b;        /* Primary accent color (coral) */
+            --secondary: #4ecdc4;     /* Secondary accent color (teal) */
+            --border: #e2e8f0;        /* Border color */
+            --error: #ef4444;         /* Error message color */
+            --success: #22c55e;       /* Success message color */
+        }
+
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Base body styles with centered content */
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main container for responsive width */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 0 1.5rem;
+        }
+
+        /* Login form container with shadow and rounded corners */
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header section with icon and text */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Admin icon styling */
+        .login-header i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        /* Header title styling */
+        .login-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Header subtitle styling */
+        .login-header p {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Form group spacing */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        /* Input field styling */
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        /* Input field focus state */
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        /* Placeholder text styling */
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Button base styles */
+        .btn {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* Primary button styling */
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Primary button hover effect */
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-1px);
+        }
+
+        /* Back to home link styling */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        /* Back link hover effect */
+        .back-link:hover {
+            color: #ff5252;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Login form container -->
+        <div class="login-container">
+            <!-- Header with icon and welcome message -->
+            <div class="login-header">
+                <i class="fas fa-user-shield"></i>  <!-- Admin shield icon -->
+                <h1>Admin Login</h1>
+                <p>Welcome back! Please login to your account.</p>
+            </div>
+            <!-- Login form with validation -->
+            <form id="adminLoginForm" onsubmit="return handleAdminLogin(event)">
+                <!-- Username input field -->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" placeholder="Username" required>
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+                <!-- Password input field -->
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <!-- Back to home link -->
+            <a href="../index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+    <!-- JavaScript for form handling -->
+    <script src="../js/admin.js"></script>
+</body>
+</html> 
