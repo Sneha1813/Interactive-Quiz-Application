@@ -199,6 +199,47 @@
         </div>
     </div>
     <!-- JavaScript for form handling -->
-    <script src="../js/admin.js"></script>
+    <script>
+    // Admin credentials
+    const ADMIN_CREDENTIALS = {
+        username: 'admin',
+        password: 'admin123'
+    };
+
+    // First clear any old data
+    localStorage.clear();
+
+    // Initialize storage
+    function initializeStorage() {
+        const keys = ['students', 'exams', 'results'];
+        keys.forEach(key => {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, JSON.stringify([]));
+            }
+        });
+    }
+
+    // Handle login
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+            // Set both authentication flags
+            localStorage.setItem('adminLoggedIn', 'true');
+            localStorage.setItem('currentAdmin', JSON.stringify({ username: 'admin' }));
+            
+            // Initialize storage
+            initializeStorage();
+
+            // Go to dashboard
+            window.location.href = 'dashboard.html';
+        } else {
+            alert('Invalid credentials! Please use:\nUsername: admin\nPassword: admin123');
+        }
+    });
+    </script>
 </body>
 </html> 
