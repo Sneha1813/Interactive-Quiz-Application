@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - ExamPro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --accent: #ff6b6b;
+            --secondary: #4ecdc4;
+            --border: #e2e8f0;
+            --error: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --card-bg: #ffffff;
+            --sidebar-width: 250px;
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --light-text: #64748b;
+            --background: #f8fafc;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .logo h2 {
+            font-size: 1.25rem;
+            color: var(--text);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .user-menu button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-menu button:hover {
+            background-color: var(--bg);
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h3 {
+            font-size: 1.125rem;
+            color: var(--text);
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-card p {
+            opacity: 0.9;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .stat-icon.exams {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .stat-icon.completed {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .stat-icon.pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stat-info h4 {
+            font-size: 0.875rem;
+            color: var(--light-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Exam List Styles */
+        .exam-list {
+            padding: 1.25rem;
+        }
+
+        .exam-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .exam-header h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .exam-header p {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+        }
+
+        .exam-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .exam-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+        }
+
+        .exam-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            padding: 1.25rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 500;
+            color: var(--light-text);
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff5252;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+
+        /* Score Badge Styles */
+        .score-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .score-high {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .score-medium {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .score-low {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Profile Styles */
+        .profile-info {
+            padding: 1.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--light-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .form-group p {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 0px;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                width: 100%;
+                height: 100vh;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .welcome-card {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .exam-card {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .exam-info {
+                width: 100%;
+            }
+
+            .exam-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .exam-actions button {
+                width: 100%;
+            }
+
+            .table-container {
+                margin: 0 -1rem;
+                padding: 0 1rem;
+                overflow-x: auto;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>ExamPro</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showTab('dashboard')">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showTab('exams')">
+                        <i class="fas fa-file-alt"></i>
+                        Exams
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showTab('results')">
+                        <i class="fas fa-chart-bar"></i>
+                        Results
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showTab('profile')">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>Student Dashboard</h1>
+                <div class="user-menu">
+                    <button onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <div id="dashboard" class="tab-content active">
+                <div class="welcome-card">
+                    <h2>Welcome, <span id="studentName">Student</span>!</h2>
+                    <p>Here's an overview of your exam performance and upcoming tests.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon exams">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Total Exams</h4>
+                            <p id="totalExams">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon completed">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Completed</h4>
+                            <p id="completedExams">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Pending</h4>
+                            <p id="pendingExams">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Upcoming Exams</h3>
+                    </div>
+                    <div class="exam-list" id="upcomingExamsList">
+                        <!-- Upcoming exams will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="exams" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Available Exams</h3>
+                    </div>
+                    <div class="exam-list" id="availableExamsList">
+                        <!-- Available exams will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Exam Results</h3>
+                    </div>
+                    <div class="table-container">
+                        <table id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>Exam</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsList">
+                                <!-- Results will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Student Profile</h3>
+                    </div>
+                    <div class="profile-info">
+                        <div class="form-group">
+                            <label>Student ID</label>
+                            <p id="profileStudentId">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <p id="profileName">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <p id="profileEmail">-</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Joined Date</label>
+                            <p id="profileJoinedDate">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // STUDENT DASHBOARD FUNCTIONALITY
+        // =============================================
+
+        // Authentication Check
+        // Check if student is logged in, redirect to login if not
+        const currentStudent = JSON.parse(localStorage.getItem('currentStudent'));
+        if (!currentStudent) {
+            window.location.href = 'login.html';
+        }
+
+        // Update welcome message with student's name
+        document.getElementById('studentName').textContent = currentStudent.name || 'Student';
+        
+        // =============================================
+        // Tab Navigation System
+        // =============================================
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update active nav link styling
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelector(`.nav-link[onclick="showTab('${tabId}')"]`).classList.add('active');
+            
+            // Load appropriate data based on selected tab
+            switch(tabId) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'exams':
+                    loadAvailableExams();
+                    break;
+                case 'results':
+                    loadResults();
+                    break;
+                case 'profile':
+                    loadProfile();
+                    break;
+            }
+        }
+        
+        // =============================================
+        // Dashboard Data Management
+        // =============================================
+        function loadDashboardData() {
+            // Get all exams and results from localStorage
+            const exams = JSON.parse(localStorage.getItem('exams')) || [];
+            const results = JSON.parse(localStorage.getItem('results')) || [];
+            
+            // Filter results for current student only
+            const studentResults = results.filter(result => result.studentId === currentStudent.id);
+            
+            // Update dashboard statistics
+            document.getElementById('totalExams').textContent = exams.length;
+            document.getElementById('completedExams').textContent = studentResults.length;
+            document.getElementById('pendingExams').textContent = exams.length - studentResults.length;
+            
+            // Load upcoming exams section
+            loadUpcomingExams();
+        }
+        
+        // =============================================
+        // Exam Management
+        // =============================================
+        function loadUpcomingExams() {
+            // Get exams and results data
+            const exams = JSON.parse(localStorage.getItem('exams')) || [];
+            const results = JSON.parse(localStorage.getItem('results')) || [];
+            
+            // Find exams that student hasn't completed yet
+            const completedExamIds = results
+                .filter(result => result.studentId === currentStudent.id)
+                .map(result => result.examId);
+            
+            const upcomingExams = exams.filter(exam => !completedExamIds.includes(exam.id));
+            
+            // Display upcoming exams or message if none available
+            const upcomingExamsList = document.getElementById('upcomingExamsList');
+            upcomingExamsList.innerHTML = upcomingExams.length === 0 
+                ? '<p>No upcoming exams available.</p>'
+                : upcomingExams.map(exam => `
+                    <div class="exam-card">
+                        <div class="exam-header">
+                            <h3>${exam.title}</h3>
+                            <p>${exam.description}</p>
+                        </div>
+                        <div class="exam-body">
+                            <div class="exam-info">
+                                <span><i class="fas fa-clock"></i> ${exam.duration} minutes</span>
+                                <span><i class="fas fa-question-circle"></i> ${exam.questions ? exam.questions.length : 0} questions</span>
+                            </div>
+                        </div>
+                        <div class="exam-footer">
+                            <button class="btn btn-primary" onclick="startExam('${exam.id}')">
+                                <i class="fas fa-play"></i> Start Exam
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+        }
+        
+        // Load available exams for the Exams tab
+        function loadAvailableExams() {
+            // Get exams and results data
+            const exams = JSON.parse(localStorage.getItem('exams')) || [];
+            const results = JSON.parse(localStorage.getItem('results')) || [];
+            
+            // Filter out completed exams
+            const completedExamIds = results
+                .filter(result => result.studentId === currentStudent.id)
+                .map(result => result.examId);
+            
+            const availableExams = exams.filter(exam => !completedExamIds.includes(exam.id));
+            
+            // Display available exams or message if none available
+            const availableExamsList = document.getElementById('availableExamsList');
+            availableExamsList.innerHTML = availableExams.length === 0 
+                ? '<p>No exams available at the moment.</p>'
+                : availableExams.map(exam => `
+                    <div class="exam-card">
+                        <div class="exam-header">
+                            <h3>${exam.title}</h3>
+                            <p>${exam.description}</p>
+                        </div>
+                        <div class="exam-body">
+                            <div class="exam-info">
+                                <span><i class="fas fa-clock"></i> ${exam.duration} minutes</span>
+                                <span><i class="fas fa-question-circle"></i> ${exam.questions ? exam.questions.length : 0} questions</span>
+                            </div>
+                        </div>
+                        <div class="exam-footer">
+                            <button class="btn btn-primary" onclick="startExam('${exam.id}')">
+                                <i class="fas fa-play"></i> Start Exam
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+        }
+        
+        // =============================================
+        // Results Management
+        // =============================================
+        function loadResults() {
+            // Get results and exams data
+            const results = JSON.parse(localStorage.getItem('results')) || [];
+            const exams = JSON.parse(localStorage.getItem('exams')) || [];
+            
+            // Filter and sort results for current student (newest first)
+            const studentResults = results
+                .filter(result => result.studentId === currentStudent.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Display results or message if none available
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = studentResults.length === 0 
+                ? '<tr><td colspan="5">No results available.</td></tr>'
+                : studentResults.map(result => {
+                    const exam = exams.find(e => e.id === result.examId) || { title: 'Unknown Exam' };
+                    const scorePercentage = Math.round((result.score / result.totalQuestions) * 100);
+                    const scoreClass = scorePercentage >= 70 ? 'score-high' 
+                        : scorePercentage >= 50 ? 'score-medium' 
+                        : 'score-low';
+                    
+                    return `
+                        <tr>
+                            <td>${exam.title}</td>
+                            <td>${new Date(result.date).toLocaleDateString()}</td>
+                            <td><span class="score-badge ${scoreClass}">${scorePercentage}%</span></td>
+                            <td>${scorePercentage >= 50 ? 'Passed' : 'Failed'}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="viewResultDetails('${result.id}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+        
+        // =============================================
+        // Profile Management
+        // =============================================
+        function loadProfile() {
+            // Display student profile information
+            document.getElementById('profileStudentId').textContent = currentStudent.id || '-';
+            document.getElementById('profileName').textContent = currentStudent.name || '-';
+            document.getElementById('profileEmail').textContent = currentStudent.email || '-';
+            document.getElementById('profileJoinedDate').textContent = currentStudent.joinedDate || '-';
+        }
+        
+        // =============================================
+        // Exam Actions
+        // =============================================
+        function startExam(examId) {
+            // Get exam data and validate
+            const exams = JSON.parse(localStorage.getItem('exams')) || [];
+            const exam = exams.find(e => e.id === examId);
+            
+            if (!exam) {
+                alert('Exam not found. Please try again.');
+                return;
+            }
+            
+            // Store current exam and redirect to exam page
+            localStorage.setItem('currentExam', JSON.stringify(exam));
+            window.location.href = 'exam.html';
+        }
+        
+        function viewResultDetails(resultId) {
+            // Store result ID and redirect to result page
+            localStorage.setItem('currentResultId', resultId);
+            window.location.href = 'result.html';
+        }
+        
+        // =============================================
+        // Authentication
+        // =============================================
+        function logout() {
+            // Clear student session and redirect to login
+            localStorage.removeItem('currentStudent');
+            window.location.href = 'login.html';
+        }
+        
+        // Initialize dashboard on page load
+        window.onload = function() {
+            loadDashboardData();
+        };
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taking Exam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .exam-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .timer {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .question-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background-color: #f1f5f9;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 1rem;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background-color: var(--border-color);
+            border-radius: 0.25rem;
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .exam-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+                margin-bottom: 1.5rem;
+            }
+
+            .exam-title {
+                font-size: 1.25rem;
+            }
+
+            .timer {
+                font-size: 1.125rem;
+            }
+
+            .question-container {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .question-number {
+                font-size: 1rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .question-text {
+                font-size: 1.125rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .option {
+                padding: 0.75rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .progress-bar {
+                margin-top: 1.5rem;
+            }
+        }
+
+        /* Small Mobile Devices */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .question-container {
+                padding: 1rem;
+            }
+
+            .option {
+                padding: 0.5rem;
+            }
+
+            .option input[type="radio"] {
+                margin-right: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="exam-header">
+            <h1 class="exam-title" id="examTitle">Exam Title</h1>
+            <div class="timer" id="timer">00:00</div>
+        </div>
+
+        <div class="question-container">
+            <div class="question-number" id="questionNumber">Question 1 of 10</div>
+            <div class="question-text" id="questionText">Question text goes here</div>
+            <div class="options" id="options">
+                <!-- Options will be dynamically added here -->
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="loadQuestion(currentQuestionIndex - 1)">Previous</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="handleNext()">Next</button>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // EXAM STATE MANAGEMENT
+        // =============================================
+        let currentQuestionIndex = 0;  // Track current question
+        let timeRemaining = 0;         // Track remaining time
+        let timerInterval;             // Timer interval reference
+        let answers = [];              // Store student's answers
+        let examData = null;           // Store current exam data
+
+        // Initialize exam when page loads
+        window.onload = initializeExam;
+
+        // =============================================
+        // Exam Initialization
+        // =============================================
+        function initializeExam() {
+            // Load exam data from localStorage
+            examData = JSON.parse(localStorage.getItem('currentExam'));
+            if (!examData) {
+                alert('No exam data found. Redirecting to dashboard...');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Set exam title in header
+            document.getElementById('examTitle').textContent = examData.title;
+
+            // Initialize timer (default 60 minutes if not specified)
+            timeRemaining = examData.duration || 60 * 60;
+            startTimer(timeRemaining);
+
+            // Load first question
+            loadQuestion(0);
+        }
+
+        // =============================================
+        // Question Management
+        // =============================================
+        function loadQuestion(index) {
+            // Validate exam data and question index
+            if (!examData || !examData.questions) {
+                console.error('No exam data or questions found');
+                return;
+            }
+
+            const questions = examData.questions;
+            if (index < 0 || index >= questions.length) {
+                return;
+            }
+
+            // Update current question index
+            currentQuestionIndex = index;
+            const question = questions[index];
+
+            // Update question display
+            document.getElementById('questionNumber').textContent = `Question ${index + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = question.text;
+
+            // Clear and rebuild options
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            // Create option elements
+            question.options.forEach((option, optionIndex) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'question';
+                input.id = `option${optionIndex}`;
+                input.value = optionIndex;
+                
+                // Restore previous answer if exists
+                if (answers[index] === optionIndex) {
+                    input.checked = true;
+                }
+
+                const label = document.createElement('label');
+                label.htmlFor = `option${optionIndex}`;
+                label.textContent = option;
+
+                optionDiv.appendChild(input);
+                optionDiv.appendChild(label);
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').textContent = 
+                index === questions.length - 1 ? 'Submit' : 'Next';
+
+            // Update progress bar
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // =============================================
+        // Navigation and Answer Management
+        // =============================================
+        function handleNext() {
+            // Save current answer
+            const selectedOption = document.querySelector('input[name="question"]:checked');
+            if (selectedOption) {
+                answers[currentQuestionIndex] = parseInt(selectedOption.value);
+            }
+
+            // Submit exam if last question, otherwise go to next
+            if (currentQuestionIndex === examData.questions.length - 1) {
+                submitExam();
+            } else {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        // =============================================
+        // Timer Management
+        // =============================================
+        function startTimer(duration) {
+            const timerDisplay = document.getElementById('timer');
+            
+            function updateTimer() {
+                // Calculate minutes and seconds
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                // Auto-submit when time runs out
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+                timeRemaining--;
+            }
+
+            // Start timer
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // =============================================
+        // Exam Submission
+        // =============================================
+        function submitExam() {
+            // Stop the timer
+            clearInterval(timerInterval);
+
+            // Calculate score
+            let score = 0;
+            examData.questions.forEach((question, index) => {
+                if (answers[index] === question.correctAnswer) {
+                    score++;
+                }
+            });
+
+            // Calculate percentage score
+            const scorePercentage = Math.round((score / examData.questions.length) * 100);
+
+            // Get current student info
+            const currentStudent = JSON.parse(localStorage.getItem('currentStudent'));
+
+            // Create result object for admin panel
+            const adminResult = {
+                studentId: currentStudent.id,
+                studentName: currentStudent.name,
+                examId: examData.id,
+                examTitle: examData.title,
+                score: score,
+                totalQuestions: examData.questions.length,
+                date: new Date().toISOString()
+            };
+
+            // Save to admin results
+            const adminResults = JSON.parse(localStorage.getItem('results') || '[]');
+            adminResults.push(adminResult);
+            localStorage.setItem('results', JSON.stringify(adminResults));
+            
+            console.log('Saved admin result:', adminResult);
+            console.log('All admin results:', adminResults);
+
+            // Create result object for student view
+            const studentResult = {
+                examId: examData.id,
+                examTitle: examData.title,
+                score: score,
+                totalQuestions: examData.questions.length,
+                date: new Date().toISOString()
+            };
+
+            // Store current result for display
+            localStorage.setItem('currentResult', JSON.stringify(studentResult));
+
+            // Save to student results
+            const studentResults = JSON.parse(localStorage.getItem('studentResults') || '[]');
+            studentResults.push(studentResult);
+            localStorage.setItem('studentResults', JSON.stringify(studentResults));
+
+            // Clear current exam
+            localStorage.removeItem('currentExam');
+
+            // Redirect to result page
+            window.location.href = 'result.html';
+        }
+    </script>
+</body>
+</html> 
