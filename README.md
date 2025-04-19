@@ -154,3 +154,13 @@ An innovative online examination platform that transforms traditional assessment
 - Dedicated support team
 
 This application represents the future of online assessment, combining ease of use with powerful features to create an effective and engaging testing environment.
+
+
+**OUTPUT**
+![Image](https://github.com/user-attachments/assets/c5855140-fa42-42ed-abd5-559a74599abd)
+![Image](https://github.com/user-attachments/assets/551dfce9-9628-44f0-abf2-a362eb13cd62)
+![Image](https://github.com/user-attachments/assets/7a731133-23f2-4ef7-b59d-21041f6d8ce0)
+![Image](https://github.com/user-attachments/assets/c0d624b0-cdc7-49d7-9f34-c266239d5fa5)
+![Image](https://github.com/user-attachments/assets/571cf279-dceb-4a2c-a426-6c55dd4228b1)
+![Image](https://github.com/user-attachments/assets/b77ce1fb-02b5-4470-afb4-d200f0fda791)
+![Image](https://github.com/user-attachments/assets/c4ebef16-d3f7-4f6d-9945-b7d8a8f984bc)
